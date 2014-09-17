@@ -1,0 +1,174 @@
+GLdouble incr = l/s;
+        GLdouble aux = 0;
+        for(int i = 0; i < s; i++){
+                for(int j = 0; j < 4;j++){
+                        int v = i*4+j;//numero de vertice actual
+                        //ShowMessage(v);
+                        switch(v % 4){
+                        case 0:
+                                vertices[v] = new PV3D(0,0,l-aux,1);
+                                //incr = l / (s+1);
+                                break;
+                        case 1:
+                                vertices[v] = new PV3D(a,0,l-aux,1);
+                                break;
+                        case 2:
+                                vertices[v] = new PV3D(a,g,l-aux,1);
+                                break;
+                        case 3:
+                                vertices[v] = new PV3D(0,g,l-aux,1);
+                                break;
+                        }
+                }
+                aux += incr;
+        }
+
+        /*vertices[0] = new PV3D(0,0,l,1);
+        vertices[1] = new PV3D(a,0,l,1);
+        vertices[2] = new PV3D(a,g,l,1);
+        vertices[3] = new PV3D(0,g,l,1);
+
+        vertices[4] = new PV3D(0,0,l/2,1);
+        vertices[5] = new PV3D(a,0,l/2,1);
+        vertices[6] = new PV3D(a,g,l/2,1);
+        vertices[7] = new PV3D(0,g,l/2,1);
+
+        vertices[8] = new PV3D(0,0,0,1);
+        vertices[9] = new PV3D(a,0,0,1);
+        vertices[10] = new PV3D(a,g,0,1);
+        vertices[11] = new PV3D(0,g,0,1);*/
+
+        int cara_i = 0;
+        for(int i = 0; i < s && cara_i < numCaras-2; i++){
+                for(int j = 0; j < 4;j++){
+                        int v0,v1,v2,v3;
+                        v0 = (i*4+j)%numVertices;
+                        v1 = (v0 + 4)%numVertices;
+                        if(v0%3 == 0 && v0 != 0)
+                                v2 = (v1-3)%numVertices;
+                        else
+                                v2 = (v1 + 1)%numVertices;
+                        v3 = (v2-4)%numVertices;
+                        if(v0 >= s*4 -4)//ultima seccion
+                                v3 = v3 + s*4;
+                        VerticeNormal** v = new VerticeNormal*[4];
+                        v[0] = new VerticeNormal(1,cara_i);
+                        v[1] = new VerticeNormal(5,cara_i);
+                        v[2] = new VerticeNormal(6,cara_i);
+                        v[3] = new VerticeNormal(2,cara_i);
+                        caras[cara_i] = new Cara(4,v);
+                        normales[cara_i] = calculoNormalNewell(caras[cara_i]);
+                        cara_i++;
+                }
+        }
+
+        //tapas
+        VerticeNormal** v = new VerticeNormal*[4];
+        v[0] = new VerticeNormal(0,cara_i);
+        v[1] = new VerticeNormal(1,cara_i);
+        v[2] = new VerticeNormal(2,cara_i);
+        v[3] = new VerticeNormal(3,cara_i);
+        caras[cara_i] = new Cara(4,v);
+        normales[cara_i] = calculoNormalNewell(caras[cara_i]);
+        cara_i++;
+        v = new VerticeNormal*[4];
+        v[0] = new VerticeNormal(s*4-4,cara_i);
+        v[1] = new VerticeNormal(s*4-3,cara_i);
+        v[2] = new VerticeNormal(s*4-2,cara_i);
+        v[3] = new VerticeNormal(s*4-1,cara_i);
+        caras[cara_i] = new Cara(4,v);
+        normales[cara_i] = calculoNormalNewell(caras[cara_i]);
+
+
+
+
+
+        /*int i = 0;
+        VerticeNormal** v = new VerticeNormal*[4];
+        v[0] = new VerticeNormal(0,i);
+        v[1] = new VerticeNormal(1,i);
+        v[2] = new VerticeNormal(2,i);
+        v[3] = new VerticeNormal(3,i);
+        caras[i] = new Cara(4,v);
+        normales[i] = calculoNormalNewell(caras[i]);
+
+        i++;
+        v = new VerticeNormal*[4];
+        v[0] = new VerticeNormal(1,i);
+        v[1] = new VerticeNormal(5,i);
+        v[2] = new VerticeNormal(6,i);
+        v[3] = new VerticeNormal(2,i);
+        caras[i] = new Cara(4,v);
+        normales[i] = calculoNormalNewell(caras[i]);
+
+        i++;
+        v = new VerticeNormal*[4];
+        v[0] = new VerticeNormal(2,i);
+        v[1] = new VerticeNormal(6,i);
+        v[2] = new VerticeNormal(7,i);
+        v[3] = new VerticeNormal(3,i);
+        caras[i] = new Cara(4,v);
+        normales[i] = calculoNormalNewell(caras[i]);
+
+        i++;
+        v = new VerticeNormal*[4];
+        v[0] = new VerticeNormal(3,i);
+        v[1] = new VerticeNormal(7,i);
+        v[2] = new VerticeNormal(4,i);
+        v[3] = new VerticeNormal(0,i);
+        caras[i] = new Cara(4,v);
+        normales[i] = calculoNormalNewell(caras[i]);
+        //caras nuevas
+        i++;
+        v = new VerticeNormal*[4];
+        v[0] = new VerticeNormal(5,i);
+        v[1] = new VerticeNormal(1,i);
+        v[2] = new VerticeNormal(0,i);
+        v[3] = new VerticeNormal(4,i);
+        caras[i] = new Cara(4,v);
+        normales[i] = calculoNormalNewell(caras[i]);
+
+        i++;
+        v = new VerticeNormal*[4];
+        v[0] = new VerticeNormal(5,i);
+        v[1] = new VerticeNormal(9,i);
+        v[2] = new VerticeNormal(10,i);
+        v[3] = new VerticeNormal(6,i);
+        caras[i] = new Cara(4,v);
+        normales[i] = calculoNormalNewell(caras[i]);
+
+        i++;
+        v = new VerticeNormal*[4];
+        v[0] = new VerticeNormal(6,i);
+        v[1] = new VerticeNormal(10,i);
+        v[2] = new VerticeNormal(11,i);
+        v[3] = new VerticeNormal(7,i);
+        caras[i] = new Cara(4,v);
+        normales[i] = calculoNormalNewell(caras[i]);
+
+        i++;
+        v = new VerticeNormal*[4];
+        v[0] = new VerticeNormal(4,i);
+        v[1] = new VerticeNormal(8,i);
+        v[2] = new VerticeNormal(9,i);
+        v[3] = new VerticeNormal(5,i);
+        caras[i] = new Cara(4,v);
+        normales[i] = calculoNormalNewell(caras[i]);
+
+        i++;
+        v = new VerticeNormal*[4];
+        v[0] = new VerticeNormal(7,i);
+        v[1] = new VerticeNormal(11,i);
+        v[2] = new VerticeNormal(8,i);
+        v[3] = new VerticeNormal(4,i);
+        caras[i] = new Cara(4,v);
+        normales[i] = calculoNormalNewell(caras[i]);
+
+        i++;
+        v = new VerticeNormal*[4];
+        v[0] = new VerticeNormal(9,i);
+        v[1] = new VerticeNormal(8,i);
+        v[2] = new VerticeNormal(11,i);
+        v[3] = new VerticeNormal(10,i);
+        caras[i] = new Cara(4,v);
+        normales[i] = calculoNormalNewell(caras[i]);*/
